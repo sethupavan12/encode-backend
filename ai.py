@@ -8,11 +8,30 @@ from langchain_community.llms import OpenAI,Ollama
 from langchain_core.prompts import PromptTemplate
 from dotenv import load_dotenv
 import json
+import whisper
 
 load_dotenv()
 
 
 from prompts import FAN_PROMPT,HATER_PROMPT,CURIOUS_PROMPT, VIDEO_FIND_PROMPT
+
+class Auscribe:
+    """
+    Converts the audio files from front end to text using Whispher.
+    """
+    
+    def __init__(self,model_size="tiny"):
+        self.model = whisper.load_model(model_size)
+
+    def convert_to_text(self, file):
+        """
+        This method converts the audio to text.
+        :param file: audio file
+        :return: str (The text from the audio)
+        """
+        out = self.model.transcribe(file)
+        return out["text"]
+
 
 
 class LiveAgent:

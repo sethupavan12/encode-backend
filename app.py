@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify, Response
 from flask_cors import CORS
 from PIL import Image
 from dotenv import load_dotenv
-from ai import DescribeImage, AiAgent, LiveAgent
+from ai import DescribeImage, AiAgent, LiveAgent, Auscribe
 # import speech_recognition as sr
 import io
 import random
@@ -25,6 +25,8 @@ fan_agent = AiAgent(persona="fan")
 hater_agent = AiAgent(persona="hater")
 curious_agent = AiAgent(persona="curious")
 
+
+audio_transcriber = Auscribe()
 
 # Load the random comments from the JSON file
 with open('random_comments.json', 'r') as f:
@@ -65,7 +67,7 @@ def generate_comments():
 def generate_audio_comments():
     # Check if the post request has the file part
     if 'file' not in request.files:
-        return jsonify({"error": "No file part"}), 400
+        return jsonify({"error": "No audio file part"}), 400
 
     file = request.files['file']
     type(file)
@@ -77,6 +79,8 @@ def generate_audio_comments():
 
     if file:
         filename = "audio.wav"  # Or use secure_filename(file.filename) to keep original name
+        print(file)
+        text = audio_transcriber.convert_to_text(file=file)
         file.save(filename)
         # Process the file here (e.g., transcribing, generating comments)
 
