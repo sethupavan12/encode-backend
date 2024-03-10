@@ -77,15 +77,17 @@ def generate_audio_comments():
     if file.filename == '':
         return jsonify({"error": "No selected file"}), 400
 
+    import librosa
+
     if file:
         filename = "audio.wav"  # Or use secure_filename(file.filename) to keep original name
         print(file)
-        text = audio_transcriber.convert_to_text(file=file)
         file.save(filename)
+        audio_array, sample_rate = librosa.load(filename)
+        text = audio_transcriber.convert_to_text(file=audio_array)
         # Process the file here (e.g., transcribing, generating comments)
 
-        return jsonify({"comments": ["I love this video", "I hate this video", "I am curious about this video"]})
-
+        return jsonify({"comments": [text, "I hate this video", "I am curious about this video"]})
 
     # def generate():
     #     for _ in range(2):
