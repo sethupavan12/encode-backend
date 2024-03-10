@@ -7,11 +7,12 @@ from langchain.chains import LLMChain
 from langchain_community.llms import OpenAI,Ollama
 from langchain_core.prompts import PromptTemplate
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
 
 
-from prompts import FAN_PROMPT,HATER_PROMPT,CURIOUS_PROMPT
+from prompts import FAN_PROMPT,HATER_PROMPT,CURIOUS_PROMPT, VIDEO_FIND_PROMPT
 
 
 class LiveAgent:
@@ -26,6 +27,41 @@ class LiveAgent:
 
     def __init__(self):
         self.video_path = ""
+        self.welcome_video_path = "./videos/adele_saying_hi.mov"
+        self.model = OpenAI()
+
+    def get_video_path(self, audio_text, first_time=False):
+        """
+        This method finds the most relevant video using the audio text.
+        :param first_time: bool first time or not
+        :param audio_text: str (The audio text)
+        :return: str (The path of the most relevant video)
+        """
+        if first_time:
+            self.video_path = self.welcome_video_path
+        else:
+            # Find the most relevant video using the audio text
+            self.video_path = self.use_ai_to_find_relevant_video(audio_text)
+        return self.video_path
+    
+    def use_ai_to_find_relevant_video(self, audio_text):
+        """
+        This method uses AI to find the most relevant video using the audio text.
+        :param audio_text: str (The audio text)
+        :return: str (The path of the most relevant video)
+        """
+        prompt_template=VIDEO_FIND_PROMPT
+        prompt = PromptTemplate(
+            input_variables=["audio_text"], template=prompt_template
+        )
+        llm_chain = LLMChain(llm=self.model, prompt=prompt)
+        output = llm_chain.invoke(audio_text)
+        print(output)
+        clean_path = output['text']
+        return clean_path
+
+
+        
 
 class AiAgent:
     """

@@ -41,3 +41,17 @@ The following is the description of what is seen in the live.
 {visual_description}
 """
 
+
+VIDEO_FIND_PROMPT = """
+You are a really great AI agent who is very meticulous at finding correct information.
+The below are some tuples of video paths and video descriptions. You need to use the given audio text which is 
+{audio_text} to find out the most relevant video from the given tuples. For example, if the audio text says 'are you home now'
+the audio should use something similar to 'are you home now' in the available video descriptions to find the most relevant video.
+The following are the tuples of video paths and video descriptions.
+1) The video at ./videos/adele_shouting_at_dogs.mov is about Adele is shouting at dogs
+2) The video at  "./videos/adele_says_bye.mov" is about Adele saying bye
+
+DONT SAY ANYTHING ELSE BUT THE ACTUAL PATH. JUST REPLY WITH THE PATH INFORMATION. NOT
+EVEN A SINGLE WORD. JUST THE PATH.
+"""
+

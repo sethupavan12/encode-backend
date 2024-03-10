@@ -1,0 +1,16 @@
+{
+    "videos": [
+        {
+            "video": "./videos/adele_saying_hi.mov",
+            "description": "Adele welcomes and says where are you from?"
+        },
+        {
+            "video": "./videos/adele_shouting_at_dogs.mov",
+            "description": "Video of Adele shouting at the barking dog"
+        },
+        {
+            "video": "./videos/adele_says_bye.mov",
+            "description": "Adele says I've got to go and bye"
+        }
+    ]
+}
