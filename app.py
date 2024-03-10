@@ -26,7 +26,7 @@ hater_agent = AiAgent(persona="hater")
 curious_agent = AiAgent(persona="curious")
 
 
-audio_transcriber = Auscribe()
+audio_transcriber = Auscribe(model_size="base")
 
 # Load the random comments from the JSON file
 with open('random_comments.json', 'r') as f:
