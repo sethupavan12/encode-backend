@@ -12,7 +12,7 @@ load_dotenv()
 
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, origins="*")
 
 
 # Download the BLIP model 
@@ -41,6 +41,7 @@ def index():
 def generate_comments():
     # The front end will send the image as a base64 encoded string
     data = request.json
+    # print(data)
     image = data["image"]
     # if the data also has 'text' in it and it is not empty
     # 5 seconds we will use an (video) image, 5 seconds we will use the (audio) text
@@ -72,5 +73,9 @@ def generate_comments():
 
     return Response(generate(), mimetype='text/event-stream')
    
+
+if __name__ == '__main__':
+    # app.run(port=8000, debug=True)
+    app.run(host='0.0.0.0', port=8000, debug=True)
 
     
