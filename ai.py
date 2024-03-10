@@ -14,6 +14,18 @@ load_dotenv()
 from prompts import FAN_PROMPT,HATER_PROMPT,CURIOUS_PROMPT
 
 
+class LiveAgent:
+    """
+    This class is used to find the most relevant video to send to the frontend.
+    The way we decide the most relevant video is by using the what user talked about in the audio.
+    Then, the agent will find the most relevant video using the description of the video in a json file and
+    send the path of that video from the json file to the frontend.
+
+    The agent will always send welcome video when it is the first call. All the videos are from json file.
+    """
+
+    def __init__(self):
+        self.video_path = ""
 
 class AiAgent:
     """
