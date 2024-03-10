@@ -61,6 +61,43 @@ def generate_comments():
 
     return jsonify({"comments": comment_list})
 
+@app.route("/generate_audio_comments", methods=["POST"])
+def generate_audio_comments():
+    # Check if the post request has the file part
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part"}), 400
+
+    file = request.files['file']
+    type(file)
+
+    # If the user does not select a file, the browser submits an
+    # empty file without a filename.
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+
+    if file:
+        filename = "audio.wav"  # Or use secure_filename(file.filename) to keep original name
+        file.save(filename)
+        # Process the file here (e.g., transcribing, generating comments)
+
+        return jsonify({"comments": ["I love this video", "I hate this video", "I am curious about this video"]})
+
+
+    # def generate():
+    #     for _ in range(2):
+    #         # Send a random comment every second
+    #         yield f"data: {json.dumps({'comment': random.choice(random_comments)})}\n\n"
+    #         time.sleep(1)
+
+    #     # Send the generated comments
+    #     yield f"data: {json.dumps({'comment': fan_comment})}\n\n"
+    #     time.sleep(1)
+    #     yield f"data: {json.dumps({'comment': hater_comment})}\n\n"
+    #     time.sleep(1)
+    #     yield f"data: {json.dumps({'comment': curious_comment})}\n\n"
+
+    # return Response(generate(), mimetype='text/event-stream')
+
 
 # On front end, you click a button to add someone to the live stream
 # This will trigger this route. I want it so that once, I user clicks
