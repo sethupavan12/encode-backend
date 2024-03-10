@@ -42,15 +42,18 @@ def index():
 # This image will trigger the AI to generate a comment
 @app.route("/generate_comments", methods=["POST"])
 def generate_comments():
-    # The front end will send the image as a base64 encoded string
-    image = request.files["image"]
-    PIL_image = Image.open(io.BytesIO(base64.b64decode(image)))
-    image_description = image_to_text_describer.get_description_of_(PIL_image)
+    # import pdb;
+    # pdb.set_trace()
+    try:
+        # The front end will send the image as a base64 encoded string
+        image = request.form.get('image')
+        PIL_image = Image.open(io.BytesIO(base64.b64decode(image)))
+        image_description = image_to_text_describer.get_description_of_(PIL_image)
 
+        # pdb.set_trace()
 
-    # Audio
-    file = request.files['file']
-    if len(file.uri) > 0:   
+        # Audio
+        file = request.files['file']
         if 'file' not in request.files:
             return jsonify({"error": "No audio file part"}), 400
         # If the user does not select a file, the browser submits an
@@ -63,16 +66,21 @@ def generate_comments():
             audio_array, sample_rate = librosa.load(filename)
             audio_description = audio_transcriber.convert_to_text(file=audio_array)
 
-    # Generate the comments
-    fan_comment = fan_agent.generate_comment(image_description,audio_description)
-    hater_comment = hater_agent.generate_comment(image_description,audio_description)
-    curious_comment = curious_agent.generate_comment(image_description,audio_description)
-    comment_list = [fan_comment, hater_comment, curious_comment]
+        context = f"This is what you see in the live stream:{image_description} and this is what you hear:{audio_description}"
+        # Generate the comments
+        fan_comment = fan_agent.generate_comment(context)
+        hater_comment = hater_agent.generate_comment(context)
+        curious_comment = curious_agent.generate_comment(context)
+        comment_list = [fan_comment, hater_comment, curious_comment]
 
-    return jsonify({"comments": comment_list})
+        return jsonify({"comments": comment_list})
+    except Exception as e:
+        print(e)
+        return jsonify({"error": "An error occured"}), 500
 
 @app.route("/generate_audio_comments", methods=["POST"])
 def generate_audio_comments():
+    print(request)
     # Check if the post request has the file part
     if 'file' not in request.files:
         return jsonify({"error": "No audio file part"}), 400
