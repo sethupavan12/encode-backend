@@ -66,7 +66,7 @@ def generate_comments():
             audio_array, sample_rate = librosa.load(filename)
             audio_description = audio_transcriber.convert_to_text(file=audio_array)
 
-        context = f"This is what you see in the live stream:{image_description} and this is what you hear:{audio_description}"
+        context = f"This is the description of what is seen in the live stream: {image_description} and this is what you hear in the live stream:{audio_description}"
         # Generate the comments
         fan_comment = fan_agent.generate_comment(context)
         hater_comment = hater_agent.generate_comment(context)
